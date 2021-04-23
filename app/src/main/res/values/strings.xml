@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">WasteCalc</string>
+
+    <string-array name="choices">
+        <item>never</item>
+        <item>sometimes</item>
+        <item>often</item>
+        <item>always</item>
+    </string-array>
+    <string-array name="choices2">
+        <item>low</item>
+        <item>normal</item>
+        <item>high</item>
+    </string-array>
+</resources>
