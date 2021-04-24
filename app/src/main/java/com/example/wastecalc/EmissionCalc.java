@@ -2,38 +2,25 @@ package com.example.wastecalc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONObject;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.util.Calendar;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 public class EmissionCalc extends AppCompatActivity {
@@ -83,7 +70,7 @@ public class EmissionCalc extends AppCompatActivity {
 
     Context context;
 
-    public void readXML (View v) throws ParserConfigurationException, IOException, SAXException {
+    public void readJSON (View v) throws ParserConfigurationException, IOException, SAXException {
         context = EmissionCalc.this;
 
         /* Make the URL based on the answers */

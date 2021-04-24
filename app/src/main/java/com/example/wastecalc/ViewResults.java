@@ -7,9 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.util.Calendar;
-
 public class ViewResults extends AppCompatActivity {
     private TextView menuButton;
     private TextView calcResults;

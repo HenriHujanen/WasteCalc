@@ -26,4 +26,12 @@ public class Credentials {
     public void setPassword(String password) {
         Password = password;
     }
+
+    public String getEmail() {
+        return Password;
+    }
+
+    public void setEmail(String password) {
+        Password = password;
+    }
 }

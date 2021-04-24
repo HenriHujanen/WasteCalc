@@ -58,13 +58,39 @@ public class CreateAccount extends AppCompatActivity {
         });
     }
 
-    /* Check that an username and email was entered, and that the password is long enough */
-    boolean validate(String name,String email, String password)
+    /* For checking password requirements*/
+    private static boolean checkString(String input) {
+        String specialChars = "~`!@#$%^&*()-_=+\\|[{]};:'\",<.>/?";
+        char currentCharacter;
+        boolean numberPresent = false;
+        boolean upperCasePresent = false;
+        boolean lowerCasePresent = false;
+        boolean specialCharacterPresent = false;
+
+        for (int i = 0; i < input.length(); i++) {
+            currentCharacter = input.charAt(i);
+            if (Character.isDigit(currentCharacter)) {
+                numberPresent = true;
+            } else if (Character.isUpperCase(currentCharacter)) {
+                upperCasePresent = true;
+            } else if (Character.isLowerCase(currentCharacter)) {
+                lowerCasePresent = true;
+            } else if (specialChars.contains(String.valueOf(currentCharacter))) {
+                specialCharacterPresent = true;
+            }
+        }
+
+        return
+                numberPresent && upperCasePresent && lowerCasePresent && specialCharacterPresent;
+    }
+
+    /* Check that an username and email was entered, and that the password is OK */
+    boolean validate(String name, String email, String password)
     {
 
-        if(name.isEmpty() || email.isEmpty() || (password.length() < 1))
+        if(name.isEmpty() || email.isEmpty() || (password.length() < 12 || !checkString(password)))
         {
-            Toast.makeText(this, "Please enter an username and an email address. Make sure that your password is longer than 1 characters.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please enter an username and an email address. Also make sure that your password meets the requirements.", Toast.LENGTH_LONG).show();
             return false;
         }
 
