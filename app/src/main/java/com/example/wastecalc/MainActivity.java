@@ -1,8 +1,10 @@
 package com.example.wastecalc;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private Button eLogin;
     private TextView eRegister;
 
+    public static SecureUtils secureUtils;
+
     /* Login attempts left */
     private int counter = 5;
 
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         /* Log in button */
         eLogin.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View view) {
 
@@ -86,9 +92,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private boolean validate(String username, String userPassword){
 
         if(CreateAccount.credentials != null){
+            /* Generate a new hash with the given password and the previously saved salt*/
+            userPassword = secureUtils.getSecurePassword(userPassword, CreateAccount.credentials.getSalt());
+            /* Compare the new hash with the previously saved hash, and if they are equal, the password is correct */
             if(username.equals(CreateAccount.credentials.getUsername()) && userPassword.equals(CreateAccount.credentials.getPassword())){
                 return true;
             }

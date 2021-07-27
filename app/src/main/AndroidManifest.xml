@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WasteCalc">
-        <activity android:name=".ResultsLog"></activity>
+        <activity android:name=".ResultsGraph"></activity>
+        <activity android:name=".ResultsLog" />
         <activity android:name=".ViewResults" />
         <activity android:name=".EmissionCalc" />
         <activity android:name=".CreateAccount" />

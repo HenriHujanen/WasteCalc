@@ -1,14 +1,18 @@
 package com.example.wastecalc;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.security.NoSuchAlgorithmException;
 
 public class CreateAccount extends AppCompatActivity {
 
@@ -19,6 +23,7 @@ public class CreateAccount extends AppCompatActivity {
     private TextView eRegCancel;
 
     public static Credentials credentials;
+    public static SecureUtils secureUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +45,26 @@ public class CreateAccount extends AppCompatActivity {
         });
 
         eRegister.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View view) {
 
                 String registeredName = eRegName.getText().toString();
                 String registeredPassword = eRegPassword.getText().toString();
                 String registeredEmail = eRegEmail.getText().toString();
+                byte[] salt = new byte[0];
 
+                try {
+                    salt = secureUtils.getSalt();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+
+                /* Save the given username, hashed password and salt */
                 if(validate(registeredName, registeredEmail, registeredPassword))
                 {
-                    credentials = new Credentials(registeredName, registeredPassword);
+                    registeredPassword = secureUtils.getSecurePassword(registeredPassword, salt);
+                    credentials = new Credentials(registeredName, registeredPassword, salt);
                     Toast.makeText(CreateAccount.this, "Successfully created an account.", Toast.LENGTH_SHORT).show();
 
                     startActivity(new Intent(CreateAccount.this, MainActivity.class));
@@ -58,7 +73,7 @@ public class CreateAccount extends AppCompatActivity {
         });
     }
 
-    /* For checking password requirements*/
+    /* For checking password requirements */
     private static boolean checkString(String input) {
         String specialChars = "~`!@#$%^&*()-_=+\\|[{]};:'\",<.>/?";
         char currentCharacter;

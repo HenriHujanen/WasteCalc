@@ -27,6 +27,10 @@ public class EmissionCalc extends AppCompatActivity {
 
     private TextView menuButton;
 
+    ClimateDietURL URL = new ClimateDietURL();
+
+    ClimateDietEntry entry = new ClimateDietEntry();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,33 +79,34 @@ public class EmissionCalc extends AppCompatActivity {
 
         /* Make the URL based on the answers */
         Spinner spinnerBio = findViewById(R.id.spinnerBiowaste);
-        String queryBio = ("query.bioWaste=" + spinnerBio.getSelectedItem().toString() + "&");
+        URL.setQueryBio("query.bioWaste=" + spinnerBio.getSelectedItem().toString() + "&");
 
         Spinner spinnerCarton = findViewById(R.id.spinnerCarton);
-        String queryCarton = ("query.carton=" + spinnerCarton.getSelectedItem().toString() + "&");
+        URL.setQueryCarton("query.carton=" + spinnerCarton.getSelectedItem().toString() + "&");
 
         Spinner spinnerElectric = findViewById(R.id.spinnerElectronic);
-        String queryElectric = ("query.electronic=" + spinnerElectric.getSelectedItem().toString() + "&");
+        URL.setQueryElectric("query.electronic=" + spinnerElectric.getSelectedItem().toString() + "&");
 
         Spinner spinnerGlass = findViewById(R.id.spinnerGlass);
-        String queryGlass = ("query.glass=" + spinnerGlass.getSelectedItem().toString() + "&");
+        URL.setQueryGlass("query.glass=" + spinnerGlass.getSelectedItem().toString() + "&");
 
         Spinner spinnerHazard = findViewById(R.id.spinnerHazardous);
-        String queryHazard = ("query.hazardous=" + spinnerHazard.getSelectedItem().toString() + "&");
+        URL.setQueryHazard("query.hazardous=" + spinnerHazard.getSelectedItem().toString() + "&");
 
         Spinner spinnerMetal = findViewById(R.id.spinnerMetal);
-        String queryMetal = ("query.metal=" + spinnerMetal.getSelectedItem().toString() + "&");
+        URL.setQueryMetal("query.metal=" + spinnerMetal.getSelectedItem().toString() + "&");
 
         Spinner spinnerPaper = findViewById(R.id.spinnerPaper);
-        String queryPaper = ("query.paper=" + spinnerPaper.getSelectedItem().toString() + "&");
+        URL.setQueryPaper("query.paper=" + spinnerPaper.getSelectedItem().toString() + "&");
 
         Spinner spinnerPlastic = findViewById(R.id.spinnerPlastic);
-        String queryPlastic = ("query.plastic=" + spinnerPlastic.getSelectedItem().toString() + "&");
+        URL.setQueryPlastic("query.plastic=" + spinnerPlastic.getSelectedItem().toString() + "&");
 
         Spinner spinnerEstimate = findViewById(R.id.spinnerAmountestimate);
-        String queryEstimate = ("query.amountEstimate=" + spinnerEstimate.getSelectedItem().toString() + "&");
+        URL.setQueryEstimate("query.amountEstimate=" + spinnerEstimate.getSelectedItem().toString() + "&");
 
-        String url = "https://ilmastodieetti.ymparisto.fi/ilmastodieetti/calculatorapi/v1/WasteCalculator?" + queryBio + queryCarton + queryElectric + queryGlass + queryHazard + queryMetal + queryPaper + queryPlastic + queryEstimate;
+        URL.setURL("https://ilmastodieetti.ymparisto.fi/ilmastodieetti/calculatorapi/v1/WasteCalculator?" + URL.getQueryBio() + URL.getQueryCarton() + URL.getQueryElectric() + URL.getQueryGlass() + URL.getQueryHazard() + URL.getQueryMetal() + URL.getQueryPaper() + URL.getQueryPlastic() + URL.getQueryEstimate());
+        String url = URL.getURL();
 
         /* Get the response form the API, send it to the result viewing activity and log the result */
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -111,13 +116,14 @@ public class EmissionCalc extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("Rest response", response);
+                        entry.setYearlyConsumption(response);
+                        Log.e("Rest response", entry.getYearlyConsumption());
                         Intent intent = new Intent(EmissionCalc.this, ViewResults.class);
-                        intent.putExtra("key", response);
+                        intent.putExtra("key", entry.getYearlyConsumption());
                         startActivity(intent);
                         Calendar calendar = Calendar.getInstance();
-                        String resultDate = DateFormat.getDateInstance().format(calendar.getTime());
-                        String logString = (resultDate +": " + response + "kg CO2 / year.\n");
+                        entry.setEntryDate(DateFormat.getDateInstance().format(calendar.getTime()));
+                        String logString = (entry.getEntryDate() +": " + entry.getYearlyConsumption() + "kg CO2 / year.\n");
                         try {
                             OutputStreamWriter ows = new OutputStreamWriter(context.openFileOutput("CalcLog.csv", Context.MODE_APPEND));
                             ows.write(logString);
